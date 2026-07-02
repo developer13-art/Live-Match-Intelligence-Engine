@@ -1,0 +1,1 @@
+{"version":3,"file":"agentStatusThresholds.d.ts","sourceRoot":"","sources":["../../../src/generated/types/agentStatusThresholds.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,MAAM,qBAAqB,GAAG;IAClC,cAAc,EAAE,MAAM,CAAC;IACvB,aAAa,EAAE,MAAM,CAAC;IACtB,mBAAmB,EAAE,MAAM,CAAC;CAC7B,CAAC"}

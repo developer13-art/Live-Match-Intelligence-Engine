@@ -1,0 +1,140 @@
+You are an elite-level system architect, real-time systems engineer, and AI reasoning designer.
+
+Your task is to design and build a complete, production-grade real-time system, not a prototype, not an MVP.
+
+The system is called:
+
+Live Match Intelligence Engine (LMIE)
+
+🎯 Mission
+
+Build a real-time sports intelligence platform that understands live football matches as dynamic evolving systems and produces explainable, confidence-scored intelligence in real time.
+
+This system must feel alive, reactive, intelligent, and trustworthy.
+
+🚫 Absolute Constraints (Non-Negotiable)
+Do NOT build a betting platform
+Do NOT execute trades or wagers
+Do NOT integrate payments or bookmakers
+Do NOT generate “bet now”, “buy”, or “sell” instructions
+This is an intelligence and analytics system only
+
+Violating these rules is failure.
+
+🧠 Core Intelligence Requirements
+1. Match State Engine
+
+Design a state-based model where a match continuously occupies a dominant state.
+
+The engine must:
+
+Detect state transitions
+Weigh competing signals
+Avoid flapping or noise-driven changes
+Preserve temporal context
+
+State changes are more important than individual events.
+
+2. Continuous Index Modeling
+
+Implement continuously updating indices that represent:
+
+Momentum
+Pressure
+Volatility
+Market reaction lag
+
+Indices must be:
+
+Time-windowed
+Smooth but responsive
+Resistant to single-event spikes
+3. Signal Generation Layer
+
+Signals must emerge naturally from state and index behavior.
+
+Each signal must include:
+
+What changed
+Why it changed
+How confident the system is
+What could invalidate it
+How long it is likely relevant
+
+Signals must be observations, never commands.
+
+4. Risk & False-Signal Defense
+
+The system must actively detect and suppress:
+
+Fake pressure
+Low-quality dominance
+Emotional market overreaction
+Data sparsity artifacts
+
+Risk warnings are mandatory when uncertainty is high.
+
+5. Explainability & Narrative Engine
+
+Design a reasoning layer that:
+
+Converts numeric behavior into plain language
+Explains cause-and-effect relationships
+Builds a live match narrative
+Maintains internal reasoning consistency over time
+
+This must not feel random or generic.
+
+⚡ Real-Time Behavior Requirements
+Event-driven architecture
+Live streaming updates
+State recalculation on new information
+Graceful handling of data gaps
+Deterministic behavior under identical inputs
+
+The system must remain stable during high-frequency updates.
+
+🖥 Interface Expectations
+
+Design a polished, interactive interface that supports:
+
+Fan Perspective
+Live momentum visualization
+Match flow understanding
+Story-like narration
+Analyst Perspective
+Signal cards with confidence
+Risk and uncertainty indicators
+Market vs reality comparisons
+Time relevance visualization
+
+Mode switching must not reload or reset state.
+
+🔌 Data Handling
+Start with simulated live match streams
+Architect for seamless replacement with real providers
+Time synchronization is critical
+Late or missing data must not break state logic
+🧪 Quality Bar (Very Important)
+
+This system must:
+
+Look like a real startup product
+Feel reliable, not experimental
+Be explainable to non-technical users
+Impress senior engineers and judges
+Handle edge cases gracefully
+
+Anything that feels like an MVP, demo, or toy implementation is unacceptable.
+
+🏁 Final Deliverable
+
+Produce:
+
+A fully working real-time system
+Clean, well-structured code
+Clear internal documentation
+A demo-ready interface
+A system that can realistically scale
+
+Build LMIE as if it were launching publicly.

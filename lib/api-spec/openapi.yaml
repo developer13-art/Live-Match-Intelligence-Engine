@@ -1,0 +1,785 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.2.0
+  description: Live Match Intelligence Engine — TxLINE-powered real-time sports analytics with on-chain signal anchoring
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: matches
+    description: Live match operations
+  - name: intelligence
+    description: Intelligence signals and indices
+  - name: odds
+    description: TxLINE odds feed
+  - name: agent
+    description: Sharp Movement Detector autonomous agent
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /matches:
+    get:
+      operationId: listMatches
+      tags: [matches]
+      summary: List all live matches
+      responses:
+        "200":
+          description: List of matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Match"
+
+  /matches/{matchId}:
+    get:
+      operationId: getMatch
+      tags: [matches]
+      summary: Get match details
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Match details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "404":
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /matches/{matchId}/snapshot:
+    get:
+      operationId: getMatchSnapshot
+      tags: [intelligence]
+      summary: Get full intelligence snapshot for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Full match intelligence snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchSnapshot"
+        "404":
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /matches/{matchId}/signals:
+    get:
+      operationId: listSignals
+      tags: [intelligence]
+      summary: Get recent intelligence signals for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Intelligence signals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Signal"
+
+  /matches/{matchId}/narrative:
+    get:
+      operationId: getNarrative
+      tags: [intelligence]
+      summary: Get live narrative entries for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Narrative entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NarrativeEntry"
+
+  /matches/{matchId}/events:
+    get:
+      operationId: listMatchEvents
+      tags: [intelligence]
+      summary: Get match event log
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Match events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchEvent"
+
+  /matches/{matchId}/odds:
+    get:
+      operationId: getMatchOdds
+      tags: [odds]
+      summary: Get current TxLINE odds for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Current odds snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OddsSnapshot"
+        "404":
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /matches/{matchId}/odds/history:
+    get:
+      operationId: getOddsHistory
+      tags: [odds]
+      summary: Get odds movement history for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Odds history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OddsSnapshot"
+
+  /intelligence/summary:
+    get:
+      operationId: getIntelligenceSummary
+      tags: [intelligence]
+      summary: Cross-match intelligence summary
+      responses:
+        "200":
+          description: Summary across all live matches
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IntelligenceSummary"
+
+  /agent/status:
+    get:
+      operationId: getAgentStatus
+      tags: [agent]
+      summary: Get Sharp Movement Detector agent status and statistics
+      responses:
+        "200":
+          description: Agent status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentStatus"
+
+  /agent/detections:
+    get:
+      operationId: listDetections
+      tags: [agent]
+      summary: List all sharp movement detections
+      responses:
+        "200":
+          description: All detections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SharpMovement"
+
+  /agent/anchors:
+    get:
+      operationId: listAnchors
+      tags: [agent]
+      summary: List on-chain signal anchors (Solana devnet)
+      responses:
+        "200":
+          description: On-chain anchors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OnChainAnchor"
+
+  /agent/wallet:
+    get:
+      operationId: getAgentWallet
+      tags: [agent]
+      summary: Get agent wallet address and devnet balance
+      responses:
+        "200":
+          description: Wallet info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletInfo"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Match:
+      type: object
+      required:
+        - id
+        - homeTeam
+        - awayTeam
+        - homeScore
+        - awayScore
+        - minute
+        - status
+        - matchState
+        - competition
+        - venue
+        - group
+        - homeFlag
+        - awayFlag
+      properties:
+        id:
+          type: string
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        homeFlag:
+          type: string
+        awayFlag:
+          type: string
+        homeScore:
+          type: integer
+        awayScore:
+          type: integer
+        minute:
+          type: integer
+        addedTime:
+          type: ["integer", "null"]
+        status:
+          type: string
+          enum: [PREMATCH, FIRST_HALF, HALF_TIME, SECOND_HALF, EXTRA_TIME, FINISHED]
+        matchState:
+          type: string
+          enum: [DOMINANCE_HOME, DOMINANCE_AWAY, PRESSURE_BUILD, TRANSITION_CHAOS, DEFENSIVE_COLLAPSE, STALEMATE, GAME_LOCK, MOMENTUM_SHIFT]
+        competition:
+          type: string
+        venue:
+          type: string
+        group:
+          type: string
+        startedAt:
+          type: ["string", "null"]
+
+    MatchIndices:
+      type: object
+      required:
+        - momentum
+        - pressure
+        - volatility
+        - marketLag
+        - dominanceHome
+        - dominanceAway
+        - updatedAt
+      properties:
+        momentum:
+          type: number
+        pressure:
+          type: number
+        volatility:
+          type: number
+        marketLag:
+          type: number
+        dominanceHome:
+          type: number
+        dominanceAway:
+          type: number
+        updatedAt:
+          type: string
+
+    Signal:
+      type: object
+      required:
+        - id
+        - type
+        - confidence
+        - headline
+        - reasoning
+        - factors
+        - riskWarnings
+        - relevanceWindowMinutes
+        - generatedAt
+        - matchId
+        - strength
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        type:
+          type: string
+          enum: [MOMENTUM_SHIFT, STATE_TRANSITION, PRESSURE_BUILDUP, VOLATILITY_SPIKE, MARKET_INEFFICIENCY, DEFENSIVE_STRESS, DOMINANCE_CONFIRMED, FALSE_PRESSURE_DETECTED]
+        strength:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+        confidence:
+          type: number
+        headline:
+          type: string
+        reasoning:
+          type: string
+        factors:
+          type: array
+          items:
+            type: string
+        riskWarnings:
+          type: array
+          items:
+            type: string
+        relevanceWindowMinutes:
+          type: integer
+        generatedAt:
+          type: string
+        expiresAt:
+          type: string
+        onChainTxId:
+          type: ["string", "null"]
+
+    NarrativeEntry:
+      type: object
+      required:
+        - id
+        - matchId
+        - text
+        - type
+        - minute
+        - timestamp
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+          enum: [STATE_CHANGE, SIGNAL_FIRED, KEY_EVENT, MOMENTUM_NOTE, ANALYST_NOTE, RISK_ALERT]
+        minute:
+          type: integer
+        timestamp:
+          type: string
+
+    MatchEvent:
+      type: object
+      required:
+        - id
+        - matchId
+        - type
+        - minute
+        - team
+        - description
+        - timestamp
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        type:
+          type: string
+          enum: [GOAL, YELLOW_CARD, RED_CARD, SUBSTITUTION, SHOT_ON_TARGET, SHOT_OFF_TARGET, CORNER, FOUL, VAR_CHECK, OFFSIDE]
+        minute:
+          type: integer
+        team:
+          type: string
+          enum: [HOME, AWAY]
+        player:
+          type: ["string", "null"]
+        description:
+          type: string
+        timestamp:
+          type: string
+
+    OddsSnapshot:
+      type: object
+      required:
+        - matchId
+        - timestamp
+        - minute
+        - homeWin
+        - draw
+        - awayWin
+        - homeWinPrev
+        - drawPrev
+        - awayWinPrev
+        - homeWinMovement
+        - drawMovement
+        - awayWinMovement
+        - totalGoalsOver25
+        - totalGoalsUnder25
+        - bttsYes
+        - bttsNo
+        - sharpMovementFlag
+        - consensusLag
+      properties:
+        matchId:
+          type: string
+        timestamp:
+          type: string
+        minute:
+          type: integer
+        homeWin:
+          type: number
+        draw:
+          type: number
+        awayWin:
+          type: number
+        homeWinPrev:
+          type: number
+        drawPrev:
+          type: number
+        awayWinPrev:
+          type: number
+        homeWinMovement:
+          type: number
+        drawMovement:
+          type: number
+        awayWinMovement:
+          type: number
+        totalGoalsOver25:
+          type: number
+        totalGoalsUnder25:
+          type: number
+        bttsYes:
+          type: number
+        bttsNo:
+          type: number
+        sharpMovementFlag:
+          type: boolean
+        consensusLag:
+          type: number
+
+    SharpMovement:
+      type: object
+      required:
+        - id
+        - matchId
+        - detectedAt
+        - minute
+        - market
+        - direction
+        - magnitude
+        - fromOdds
+        - toOdds
+        - impliedProbChange
+        - confidence
+        - reasoning
+        - outcome
+        - anchored
+        - homeTeam
+        - awayTeam
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        detectedAt:
+          type: string
+        minute:
+          type: integer
+        market:
+          type: string
+          enum: [HOME_WIN, DRAW, AWAY_WIN, OVER_2_5, UNDER_2_5, BTTS_YES, BTTS_NO]
+        direction:
+          type: string
+          enum: [SHORTENING, DRIFTING]
+        magnitude:
+          type: number
+        fromOdds:
+          type: number
+        toOdds:
+          type: number
+        impliedProbChange:
+          type: number
+        confidence:
+          type: number
+        reasoning:
+          type: string
+        outcome:
+          type: string
+          enum: [PENDING, CORRECT, INCORRECT, EXPIRED]
+        onChainTxId:
+          type: ["string", "null"]
+        anchored:
+          type: boolean
+
+    OnChainAnchor:
+      type: object
+      required:
+        - id
+        - signalId
+        - signalType
+        - txSignature
+        - explorerUrl
+        - anchoredAt
+        - matchId
+        - network
+        - payloadHash
+      properties:
+        id:
+          type: string
+        signalId:
+          type: string
+        signalType:
+          type: string
+        txSignature:
+          type: string
+        explorerUrl:
+          type: string
+        anchoredAt:
+          type: string
+        matchId:
+          type: string
+        network:
+          type: string
+        payloadHash:
+          type: string
+
+    AgentStatus:
+      type: object
+      required:
+        - running
+        - cycleCount
+        - lastCycleAt
+        - nextCycleIn
+        - totalDetections
+        - correctPredictions
+        - pendingPredictions
+        - accuracy
+        - anchorsSubmitted
+        - walletAddress
+        - network
+        - thresholds
+      properties:
+        running:
+          type: boolean
+        cycleCount:
+          type: integer
+        lastCycleAt:
+          type: ["string", "null"]
+        nextCycleIn:
+          type: integer
+        totalDetections:
+          type: integer
+        correctPredictions:
+          type: integer
+        pendingPredictions:
+          type: integer
+        accuracy:
+          type: number
+        anchorsSubmitted:
+          type: integer
+        walletAddress:
+          type: string
+        network:
+          type: string
+        thresholds:
+          type: object
+          required:
+            - minMovementPct
+            - minConfidence
+            - anchorMinConfidence
+          properties:
+            minMovementPct:
+              type: number
+            minConfidence:
+              type: number
+            anchorMinConfidence:
+              type: number
+
+    WalletInfo:
+      type: object
+      required:
+        - address
+        - network
+        - explorerUrl
+        - balance
+        - airdropAvailable
+      properties:
+        address:
+          type: string
+        network:
+          type: string
+        explorerUrl:
+          type: string
+        balance:
+          type: number
+        airdropAvailable:
+          type: boolean
+
+    MatchSnapshot:
+      type: object
+      required:
+        - match
+        - indices
+        - signals
+        - narrative
+        - events
+        - stateHistory
+      properties:
+        match:
+          $ref: "#/components/schemas/Match"
+        indices:
+          $ref: "#/components/schemas/MatchIndices"
+        signals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Signal"
+        narrative:
+          type: array
+          items:
+            $ref: "#/components/schemas/NarrativeEntry"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchEvent"
+        stateHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/StateHistoryEntry"
+
+    StateHistoryEntry:
+      type: object
+      required:
+        - state
+        - minute
+        - timestamp
+      properties:
+        state:
+          type: string
+        minute:
+          type: integer
+        timestamp:
+          type: string
+        durationMinutes:
+          type: ["integer", "null"]
+
+    IntelligenceSummary:
+      type: object
+      required:
+        - totalLiveMatches
+        - highConfidenceSignals
+        - activeStates
+        - avgVolatility
+        - marketInefficiencies
+        - updatedAt
+        - sharpMovements
+        - anchorsOnChain
+        - agentCycles
+        - avgMarketLag
+      properties:
+        totalLiveMatches:
+          type: integer
+        highConfidenceSignals:
+          type: integer
+        activeStates:
+          type: array
+          items:
+            type: object
+            required:
+              - state
+              - count
+            properties:
+              state:
+                type: string
+              count:
+                type: integer
+        avgVolatility:
+          type: number
+        marketInefficiencies:
+          type: integer
+        updatedAt:
+          type: string
+        sharpMovements:
+          type: integer
+        anchorsOnChain:
+          type: integer
+        agentCycles:
+          type: integer
+        avgMarketLag:
+          type: number

@@ -1,0 +1,1 @@
+{"version":3,"file":"stateHistoryEntry.d.ts","sourceRoot":"","sources":["../../../src/generated/types/stateHistoryEntry.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,WAAW,iBAAiB;IAChC,KAAK,EAAE,MAAM,CAAC;IACd,MAAM,EAAE,MAAM,CAAC;IACf,SAAS,EAAE,MAAM,CAAC;IAClB,gBAAgB;IAChB,eAAe,CAAC,EAAE,MAAM,GAAG,IAAI,CAAC;CACjC"}
